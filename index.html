@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>राजपूतों की उत्पत्ति - अभ्यास टेस्ट</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi:ital@0;1&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', 'Tiro Devanagari Hindi', sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #eef2f6 100%);
+        }
+        .hindi-font {
+            font-family: 'Tiro Devanagari Hindi', serif;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-800 flex flex-col items-center justify-between p-4 sm:p-6">
+
+    <!-- Header Section -->
+    <header class="w-full max-w-4xl bg-white shadow-md rounded-2xl p-5 mb-6 border-b-4 border-amber-600 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div>
+            <span class="inline-block px-3 py-1 bg-amber-100 text-amber-800 font-semibold text-xs rounded-full uppercase tracking-wider mb-1">
+                राजस्थान का इतिहास • स्तर: मध्यम से उच्च
+            </span>
+            <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 hindi-font">राजपूतों की उत्पत्ति (अभ्यास टेस्ट)</h1>
+            <p class="text-sm text-slate-500 mt-0.5">कथन-आधारित एवं बहुविकल्पीय प्रश्नोत्तरी</p>
+        </div>
+        <div id="stats-counter" class="text-right flex items-center gap-3">
+            <div class="px-4 py-2 bg-slate-50 rounded-xl border border-slate-200">
+                <p class="text-xs text-slate-500 font-medium">कुल प्रश्न</p>
+                <p class="text-xl font-bold text-amber-700" id="total-q-display">12</p>
+            </div>
+            <div class="px-4 py-2 bg-slate-50 rounded-xl border border-slate-200">
+                <p class="text-xs text-slate-500 font-medium">हल किए गए</p>
+                <p class="text-xl font-bold text-indigo-700" id="answered-q-display">0/12</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="w-full max-w-4xl bg-white shadow-xl rounded-2xl p-6 sm:p-8 flex-1 flex flex-col justify-between border border-slate-100">
+        
+        <!-- Quiz Screen -->
+        <div id="quiz-screen" class="flex-1 flex flex-col justify-between">
+            <div>
+                <!-- Question Progress Bar -->
+                <div class="w-full bg-slate-100 rounded-full h-2.5 mb-6 overflow-hidden">
+                    <div id="progress-bar" class="bg-gradient-to-r from-amber-500 to-amber-600 h-2.5 rounded-full transition-all duration-300 w-[8.33%]"></div>
+                </div>
+
+                <!-- Question Header -->
+                <div class="flex items-center justify-between mb-4">
+                    <span id="question-badge" class="px-3 py-1 bg-indigo-50 text-indigo-700 rounded-lg text-sm font-semibold border border-indigo-100">
+                        प्रश्न 1 of 12
+                    </span>
+                    <span id="question-type-tag" class="text-xs font-medium px-2.5 py-1 bg-slate-100 text-slate-600 rounded">
+                        कथन आधारित
+                    </span>
+                </div>
+
+                <!-- Question Text -->
+                <div class="mb-6">
+                    <h2 id="question-title" class="text-lg sm:text-xl font-semibold text-slate-900 leading-relaxed hindi-font">
+                        प्रश्न लोड हो रहा है...
+                    </h2>
+                </div>
+
+                <!-- Options List -->
+                <div id="options-container" class="space-y-3 mb-8">
+                    <!-- Dynamic Option Buttons -->
+                </div>
+            </div>
+
+            <!-- Navigation Bar -->
+            <div class="pt-6 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
+                <button id="prev-btn" onclick="prevQuestion()" class="px-5 py-2.5 rounded-xl border border-slate-300 font-medium text-slate-600 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition">
+                    ← पिछला
+                </button>
+                <div class="flex items-center gap-2">
+                    <button id="next-btn" onclick="nextQuestion()" class="px-6 py-2.5 rounded-xl bg-slate-800 text-white font-medium hover:bg-slate-900 transition">
+                        अगला →
+                    </button>
+                    <button id="final-submit-btn" onclick="submitTest()" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-semibold hover:from-emerald-700 hover:to-emerald-800 shadow-md transition">
+                        टेस्ट जमा करें (Submit)
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Result Screen (Initially Hidden) -->
+        <div id="result-screen" class="hidden flex-1 flex-col">
+            <div class="text-center py-6 border-b border-slate-200">
+                <span class="inline-block p-3 rounded-full bg-emerald-100 text-emerald-600 mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </span>
+                <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 hindi-font">परिणाम एवं विस्तृत समीक्षा</h2>
+                <p class="text-slate-500 mt-1">आपका समग्र प्रदर्शन नीचे विश्लेषण किया गया है</p>
+                
+                <!-- Score Cards -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6 max-w-2xl mx-auto">
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                        <span class="text-xs text-slate-500">कुल स्कोर</span>
+                        <p id="res-score" class="text-2xl font-bold text-slate-800">0 / 12</p>
+                    </div>
+                    <div class="p-4 bg-emerald-50 rounded-xl border border-emerald-200">
+                        <span class="text-xs text-emerald-600">सही उत्तर</span>
+                        <p id="res-correct" class="text-2xl font-bold text-emerald-700">0</p>
+                    </div>
+                    <div class="p-4 bg-rose-50 rounded-xl border border-rose-200">
+                        <span class="text-xs text-rose-600">गलत उत्तर</span>
+                        <p id="res-incorrect" class="text-2xl font-bold text-rose-700">0</p>
+                    </div>
+                    <div class="p-4 bg-indigo-50 rounded-xl border border-indigo-200">
+                        <span class="text-xs text-indigo-600">प्रतिशत</span>
+                        <p id="res-percentage" class="text-2xl font-bold text-indigo-700">0%</p>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <button onclick="restartQuiz()" class="px-6 py-2.5 bg-amber-600 text-white rounded-xl font-medium hover:bg-amber-700 shadow-sm transition">
+                        पुनः टेस्ट दें (Retake Quiz)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Detailed Solutions Review -->
+            <div class="mt-8">
+                <h3 class="text-xl font-bold text-slate-800 mb-4 hindi-font flex items-center gap-2">
+                    <span>प्रत्येक प्रश्न का विश्लेषण एवं स्पष्टीकरण</span>
+                </h3>
+                <div id="review-container" class="space-y-6">
+                    <!-- Dynamic Answer Review Cards -->
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="mt-6 text-xs text-slate-500 text-center">
+        आधारित सामग्री: राजस्थान का इतिहास - राजपूतों की उत्पत्ति स्रोत दस्तावेज
+    </footer>
+
+    <script>
+        const quizData = [
+            {
+                id: 1,
+                type: "कथन आधारित",
+                question: "राजपूतों की उत्पत्ति के संदर्भ में निम्नलिखित कथनों पर विचार कीजिए:\n\nकथन 1: 'पृथ्वीराज रासौ' के अनुसार आबू पर्वत पर ऋषि वशिष्ठ के यज्ञ से सर्वप्रथम चौहान वंश की उत्पत्ति हुई थी।\nकथन 2: आबू पर्वत यज्ञ से उत्पन्न होने वाले चार योद्धाओं का क्रम प्रतिहार, परमार, चालुक्य और अंत में चौहान था।",
+                options: [
+                    "केवल कथन 1 सही है",
+                    "केवल कथन 2 सही है",
+                    "कथन 1 और कथन 2 दोनों सही हैं",
+                    "न तो कथन 1 सही है और न ही कथन 2"
+                ],
+                correct: 1,
+                explanation: "कथन 1 असत्य है क्योंकि सबसे पहले प्रतिहार, फिर परमार, फिर चालुक्य और अंत में सबसे शक्तिशाली 'चौहान' उत्पन्न हुए थे। अतः कथन 2 पूर्णतः सत्य है।"
+            },
+            {
+                id: 2,
+                type: "बहुविकल्पीय",
+                question: "बिजौलिया शिलालेख में वासुदेव चौहान के उत्तराधिकारी को 'वत्स गोत्रीय ब्राह्मण' बताया गया है। इस शिलालेख को आधार बनाकर राजपूतों की उत्पत्ति नागर ब्राह्मणों से मानने वाले प्रमुख विद्वान कौन हैं?",
+                options: [
+                    "डॉ. गौरीशंकर हीराचंद ओझा",
+                    "डॉ. डी. आर. भण्डारकर",
+                    "कर्नल जेम्स टॉड",
+                    "डॉ. दशरथ शर्मा"
+                ],
+                correct: 1,
+                explanation: "डॉ. डी.आर. भण्डारकर ने बिजौलिया शिलालेख के आधार पर राजपूतों की उत्पत्ति नागर ब्राह्मणों से मानी है तथा राजशेखर ब्राह्मण के अवंति सुंदरी से विवाह को भी इसका प्रमाण माना है।"
+            },
+            {
+                id: 3,
+                type: "कथन आधारित",
+                question: "राजपूतों की विदेशी उत्पत्ति के संदर्भ में निम्नलिखित कथनों का परीक्षण कीजिए:\n\nकथन 1: वी. ए. स्मिथ ने अपनी पुस्तक 'Early History of India' में राजपूतों को हूणों का वंशज बताया है।\nकथन 2: कैम्पबेल ने गुर्जर-प्रतिहारों की उत्पत्ति खंजर जनजाति से मानी है, जिनके पुरोहित गुहिलोत थे।",
+                options: [
+                    "केवल कथन 1 सही है",
+                    "केवल कथन 2 सही है",
+                    "कथन 1 और कथन 2 दोनों सही हैं",
+                    "दोनों कथन 1 और 2 असत्य हैं"
+                ],
+                correct: 2,
+                explanation: "दोनों कथन पूर्णतः सत्य हैं। वी.ए. स्मिथ ने 'Early History of India' में हूणों से उत्पत्ति मानी है, जबकि कैम्पबेल ने गुर्जर-प्रतिहारों को खंजर जनजाति से संबंधित माना जिनके पुरोहित गुहिलोत थे।"
+            },
+            {
+                id: 4,
+                type: "बहुविकल्पीय",
+                question: "मेवाड़ के किस शासक ने जयदेव कृत 'गीत गोविंद' की अपनी टीका में गुहिलोतों को नागर ब्राह्मण गुहेत का वंशज स्वीकार किया था?",
+                options: [
+                    "महाराणा प्रताप",
+                    "राणा सांगा",
+                    "महाराणा कुंभा",
+                    "राणा हम्मीर"
+                ],
+                correct: 2,
+                explanation: "मेवाड़ के महाराणा कुंभा ने 'गीत गोविंद' की टीका में स्वीकार किया था कि गुहिलोत नागर ब्राह्मण के वंशज थे, जिसका समर्थन डॉ. गोपीनाथ शर्मा भी करते हैं।"
+            },
+            {
+                id: 5,
+                type: "कथन आधारित",
+                question: "अग्निकुंड सिद्धांत के समर्थन और खंडन के संबंध में विचार कीजिए:\n\nकथन 1: मुहणौत नैणसी और सूर्यमल्ल मिश्रण ने चंद्रबरदाई के अग्निकुंड सिद्धांत का समर्थन किया है।\nकथन 2: डॉ. दशरथ शर्मा के अनुसार 'पृथ्वीराज रासौ' के मूल ग्रंथ में अग्निकुंड की कथा प्रारंभ से ही विद्यमान थी।",
+                options: [
+                    "केवल कथन 1 सही है",
+                    "केवल कथन 2 सही है",
+                    "कथन 1 और कथन 2 दोनों सही हैं",
+                    "दोनों कथन गलत हैं"
+                ],
+                correct: 0,
+                explanation: "कथन 1 सही है। कथन 2 गलत है क्योंकि डॉ. दशरथ शर्मा के अनुसार 'पृथ्वीराज रासौ' के मूल ग्रंथ में अग्निकुंड की कथा नहीं थी, यह बाद का प्रक्षेप/काल्पनिक माना गया है।"
+            },
+            {
+                id: 6,
+                type: "बहुविकल्पीय",
+                question: "राजपूतों की उत्पत्ति मध्य एशिया के यू-ची कबीले के कुषाणों से मानकर आगे चलकर गुर्जर-प्रतिहार वंश के उदय को उससे जोड़ने वाले इतिहासकार कौन हैं?",
+                options: [
+                    "कनिंघम",
+                    "विलियम क्रुक",
+                    "सी. वी. वैद्य",
+                    "कर्नल जेम्स टॉड"
+                ],
+                correct: 0,
+                explanation: "कनिंघम के अनुसार राजपूतों की उत्पत्ति मध्य एशिया के यू-ची कबीले के कुषाणों से हुई थी।"
+            },
+            {
+                id: 7,
+                type: "कथन आधारित",
+                question: "सूर्यवंशी एवं चंद्रवंशी उत्पत्ति के संदर्भ में दिए गए कथनों पर विचार कीजिए:\n\nकथन 1: नयनचन्द्र सूरि कृत 'हम्मीर महाकाव्य' तथा सीकर के 'हर्षनाथ शिलालेख' में चौहानों को सूर्यवंशी बताया गया है।\nकथन 2: चंद्रावती के चौहान, भाटी एवं यादव वंश को भगवान राम तथा लव-कुश का वंशज (सूर्यवंशी) माना गया है।",
+                options: [
+                    "केवल कथन 1 सही है",
+                    "केवल कथन 2 सही है",
+                    "कथन 1 और कथन 2 दोनों सही हैं",
+                    "दोनों कथन असत्य हैं"
+                ],
+                correct: 0,
+                explanation: "कथन 1 सत्य है। कथन 2 असत्य है क्योंकि चंद्रावती के चौहान, भाटी और यादव कृष्ण एवं अर्जुन के वंशज अर्थात् चंद्रवंशी माने गए हैं, जबकि राम व लव-कुश के वंशज राठौड़ व गुहिलोत (सूर्यवंशी) हैं।"
+            },
+            {
+                id: 8,
+                type: "बहुविकल्पीय",
+                question: "राजपूतों की उत्पत्ति के संबंध में 'मिश्रित जाति/मूल की अवधारणा' का प्रतिपादन किस विद्वान द्वारा किया गया, जिसे आधुनिक काल में सर्वाधिक मान्य मत माना जाता है?",
+                options: [
+                    "गौरीशंकर हीराचंद ओझा",
+                    "डॉ. दशरथ शर्मा",
+                    "देवी प्रसाद चट्टोपाध्याय",
+                    "डॉ. ईश्वरी सिंह"
+                ],
+                correct: 2,
+                explanation: "दस्तावेज के अनुसार 'मिश्रित मूल/जाति का सिद्धान्त' देवी प्रसाद चट्टोपाध्याय द्वारा समर्थित है और यह सर्वाधिक मान्य मत माना जाता है।"
+            },
+            {
+                id: 9,
+                type: "कथन आधारित",
+                question: "प्राचीन ग्रंथों और ऐतिहासिक साक्ष्यों के संदर्भ में विचार कीजिए:\n\nकथन 1: 'राजतरंगिणी' ग्रंथ में शाही परिवार के सदस्यों के लिए 'राजपूत' शब्द का उपयोग किया गया है।\nकथन 2: प्रसिद्ध इतिहासकार स्मिथ के अनुसार 7वीं से 12वीं शताब्दी तक उत्तर भारत पर प्रभाव के कारण इस अवधि को 'राजपूत युग' कहा जा सकता है।",
+                options: [
+                    "केवल कथन 1 सही है",
+                    "केवल कथन 2 सही है",
+                    "कथन 1 और कथन 2 दोनों सही हैं",
+                    "न तो 1 और न ही 2 सही है"
+                ],
+                correct: 2,
+                explanation: "दोनों कथन पूर्णतः सत्य हैं। राजतरंगिणी में शाही परिवार के सदस्यों को राजपूत कहा गया और वी.ए. स्मिथ ने 7वीं से 12वीं शताब्दी को 'राजपूत युग' की संज्ञा दी है।"
+            },
+            {
+                id: 10,
+                type: "बहुविकल्पीय",
+                question: "डॉ. दशरथ शर्मा ने ब्राह्मणों से उत्पत्ति के मत का खंडन करते हुए राजपूतों द्वारा ब्राह्मण गोत्र धारण करने का क्या मुख्य कारण स्पष्ट किया है?",
+                options: [
+                    "राजपूतों द्वारा बौद्ध धर्म स्वीकार करना",
+                    "राजपूतों द्वारा अपने कुल पुरोहित का गोत्र अपना लेना",
+                    "ब्राह्मणों द्वारा जबरन क्षत्रियों को गोत्र देना",
+                    "वैदिक काल में वर्ण व्यवस्था का अनुपस्थित होना"
+                ],
+                correct: 1,
+                explanation: "डॉ. दशरथ शर्मा के अनुसार कई बार राजपूत अपने कुल पुरोहित का गोत्र अपना लेते थे, जिसके कारण अभिलेखों में वत्स गोत्र आदि का उल्लेख मिलने से ब्राह्मण होने की भ्रांति हुई।"
+            },
+            {
+                id: 11,
+                type: "बहुविकल्पीय",
+                question: "निम्नलिखित में से कौन सा विद्वान/साहित्यिक स्रोत राजपूतों को 'वैदिक आर्यों/प्राचीन क्षत्रियों की संतान' मानने के सिद्धांत से प्रत्यक्ष रूप से संबंधित नहीं है?",
+                options: [
+                    "गौरीशंकर हीराचंद ओझा",
+                    "सी. वी. वैद्य",
+                    "मनुस्मृति",
+                    "विलियम क्रुक"
+                ],
+                correct: 3,
+                explanation: "विलियम क्रुक राजपूतों को विदेशी मानते हैं जिनका आबू पर्वत पर अग्निकुंड यज्ञ के माध्यम से शुद्धिकरण किया गया था। ओझा, सी.वी. वैद्य एवं मनुस्मृति इन्हें वैदिक क्षत्रियों की संतान मानते हैं।"
+            },
+            {
+                id: 12,
+                type: "कथन आधारित",
+                question: "राजपूत शब्द के प्रारंभिक प्रयोग के संबंध में विचार कीजिए:\n\nकथन 1: चीनी यात्री ह्वेनसांग ने भारतीय राजाओं को कभी 'क्षत्रिय' और कभी 'राजपूत' कहकर संबोधित किया।\nकथन 2: सातवीं-आठवीं शताब्दी तक 'राजपूत' शब्द किसी एक जाति विशेष के लिए नहीं बल्कि केवल शासक वर्ग के लिए प्रयोग होता था।",
+                options: [
+                    "केवल कथन 1 सही है",
+                    "केवल कथन 2 सही है",
+                    "कथन 1 और कथन 2 दोनों सही हैं",
+                    "दोनों कथन असत्य हैं"
+                ],
+                correct: 2,
+                explanation: "दोनों कथन बिल्कुल सही हैं। सातवीं-आठवीं शताब्दी में यह शब्द जाति सूचक न होकर केवल शासक वर्ग के लिए उपयोग होता था और ह्वेनसांग ने क्षत्रिय और राजपूत दोनों शब्दों का प्रयोग किया।"
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let userAnswers = new Array(quizData.length).fill(null);
+
+        function updateStats() {
+            const answeredCount = userAnswers.filter(ans => ans !== null).length;
+            document.getElementById('answered-q-display').innerText = `${answeredCount}/${quizData.length}`;
+            const percent = ((currentQuestionIndex + 1) / quizData.length) * 100;
+            document.getElementById('progress-bar').style.width = `${percent}%`;
+        }
+
+        function loadQuestion(index) {
+            const q = quizData[index];
+            document.getElementById('question-badge').innerText = `प्रश्न ${index + 1} of ${quizData.length}`;
+            document.getElementById('question-type-tag').innerText = q.type;
+            
+            // Format Question Text with newlines if present
+            document.getElementById('question-title').innerHTML = q.question.replace(/\n/g, '<br>');
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+
+            q.options.forEach((optText, optIdx) => {
+                const isSelected = userAnswers[index] === optIdx;
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left p-4 rounded-xl border transition-all flex items-center justify-between text-sm sm:text-base ${
+                    isSelected 
+                        ? 'border-amber-600 bg-amber-50 text-amber-950 font-semibold shadow-sm' 
+                        : 'border-slate-200 bg-white hover:bg-slate-50 text-slate-700'
+                }`;
+                btn.onclick = () => selectOption(optIdx);
+
+                const labelLetter = String.fromCharCode(65 + optIdx); // A, B, C, D
+                btn.innerHTML = `
+                    <div class="flex items-start gap-3">
+                        <span class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0 mt-0.5 ${
+                            isSelected ? 'bg-amber-600 text-white' : 'bg-slate-100 text-slate-600'
+                        }">${labelLetter}</span>
+                        <span class="leading-relaxed hindi-font">${optText}</span>
+                    </div>
+                    <div class="w-5 h-5 rounded-full border flex items-center justify-center ml-2 shrink-0 ${
+                        isSelected ? 'border-amber-600 bg-amber-600' : 'border-slate-300'
+                    }">
+                        ${isSelected ? '<div class="w-2 h-2 rounded-full bg-white"></div>' : ''}
+                    </div>
+                `;
+                container.appendChild(btn);
+            });
+
+            // Nav Buttons State
+            document.getElementById('prev-btn').disabled = (index === 0);
+            
+            if (index === quizData.length - 1) {
+                document.getElementById('next-btn').classList.add('hidden');
+            } else {
+                document.getElementById('next-btn').classList.remove('hidden');
+            }
+
+            updateStats();
+        }
+
+        function selectOption(optionIndex) {
+            userAnswers[currentQuestionIndex] = optionIndex;
+            loadQuestion(currentQuestionIndex);
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < quizData.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion(currentQuestionIndex);
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadQuestion(currentQuestionIndex);
+            }
+        }
+
+        function submitTest() {
+            const answeredCount = userAnswers.filter(ans => ans !== null).length;
+            if (answeredCount < quizData.length) {
+                const proceed = confirm(`आपने ${quizData.length} में से केवल ${answeredCount} प्रश्नों के उत्तर दिए हैं। क्या आप टेस्ट सबमिट करना चाहते हैं?`);
+                if (!proceed) return;
+            }
+
+            let correctCount = 0;
+            let incorrectCount = 0;
+
+            quizData.forEach((q, idx) => {
+                if (userAnswers[idx] === q.correct) {
+                    correctCount++;
+                } else if (userAnswers[idx] !== null) {
+                    incorrectCount++;
+                }
+            });
+
+            // Calculate percentage
+            const percentage = Math.round((correctCount / quizData.length) * 100);
+
+            // Populate Results
+            document.getElementById('res-score').innerText = `${correctCount} / ${quizData.length}`;
+            document.getElementById('res-correct').innerText = correctCount;
+            document.getElementById('res-incorrect').innerText = incorrectCount;
+            document.getElementById('res-percentage').innerText = `${percentage}%`;
+
+            // Build Review Cards
+            const reviewContainer = document.getElementById('review-container');
+            reviewContainer.innerHTML = '';
+
+            quizData.forEach((q, idx) => {
+                const userAns = userAnswers[idx];
+                const isCorrect = userAns === q.correct;
+                const notAttempted = userAns === null;
+
+                const card = document.createElement('div');
+                card.className = `p-5 rounded-2xl border ${
+                    notAttempted 
+                        ? 'border-slate-200 bg-slate-50' 
+                        : isCorrect 
+                            ? 'border-emerald-200 bg-emerald-50/40' 
+                            : 'border-rose-200 bg-rose-50/40'
+                }`;
+
+                let statusBadge = '';
+                if (notAttempted) {
+                    statusBadge = '<span class="text-xs font-semibold px-2.5 py-1 bg-slate-200 text-slate-700 rounded-md">अनुत्तरित (Skipped)</span>';
+                } else if (isCorrect) {
+                    statusBadge = '<span class="text-xs font-semibold px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-md">सही उत्तर (+1)</span>';
+                } else {
+                    statusBadge = '<span class="text-xs font-semibold px-2.5 py-1 bg-rose-100 text-rose-800 rounded-md">गलत उत्तर (0)</span>';
+                }
+
+                let optionsListHtml = q.options.map((opt, oIdx) => {
+                    const isRightOpt = oIdx === q.correct;
+                    const isUserPick = oIdx === userAns;
+
+                    let optBg = 'bg-white border-slate-200';
+                    let optText = 'text-slate-700';
+
+                    if (isRightOpt) {
+                        optBg = 'bg-emerald-100 border-emerald-400 font-semibold';
+                        optText = 'text-emerald-950';
+                    } else if (isUserPick && !isRightOpt) {
+                        optBg = 'bg-rose-100 border-rose-400 font-semibold line-through';
+                        optText = 'text-rose-950';
+                    }
+
+                    return `
+                        <div class="p-2.5 rounded-lg border text-sm flex items-center justify-between ${optBg} ${optText}">
+                            <span>${String.fromCharCode(65 + oIdx)}. ${opt}</span>
+                            ${isRightOpt ? '<span class="text-xs font-bold text-emerald-800 ml-2">✓ सही विकल्प</span>' : ''}
+                            ${(isUserPick && !isRightOpt) ? '<span class="text-xs font-bold text-rose-800 ml-2">✗ आपका चयन</span>' : ''}
+                        </div>
+                    `;
+                }).join('');
+
+                card.innerHTML = `
+                    <div class="flex items-center justify-between gap-2 mb-3">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">प्रश्न संख्या ${idx + 1} (${q.type})</span>
+                        ${statusBadge}
+                    </div>
+                    <p class="font-medium text-slate-900 mb-4 hindi-font leading-relaxed">${q.question.replace(/\n/g, '<br>')}</p>
+                    <div class="space-y-2 mb-4">
+                        ${optionsListHtml}
+                    </div>
+                    <div class="p-3.5 bg-white rounded-xl border border-slate-200/80 text-xs sm:text-sm text-slate-700">
+                        <span class="font-bold text-amber-800 block mb-1">व्याख्या / स्पष्टीकरण:</span>
+                        <p class="leading-relaxed text-slate-600">${q.explanation}</p>
+                    </div>
+                `;
+
+                reviewContainer.appendChild(card);
+            });
+
+            // Switch Screen
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function restartQuiz() {
+            userAnswers = new Array(quizData.length).fill(null);
+            currentQuestionIndex = 0;
+            document.getElementById('result-screen').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.remove('hidden');
+            loadQuestion(0);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Initialize First Question
+        loadQuestion(0);
+    </script>
+</body>
+</html>
+```eof
+
+मैंने आपके दिए गए अध्ययन पत्रक (Study Material) के आधार पर **'राजपूतों की उत्पत्ति'** पर 12 उच्च एवं मध्यम स्तर के प्रश्नों का एक पूर्णतः इंटरैक्टिव टेस्ट तैयार कर दिया है।
+
+### इस टेस्ट की मुख्य विशेषताएं:
+- **प्रश्नों का स्वरूप:** इसमें साधारण 4-विकल्पीय प्रश्नों के साथ-साथ परीक्षा पैटर्न के अनुरूप गहरे विश्लेषणात्मक **कथन 1 और कथन 2** वाले प्रश्न शामिल हैं।
+- **इंटरैक्टिव मोड:** आप एक-एक करके विकल्पों को चुन सकते हैं, आगे-पीछे नेविगेट कर सकते हैं तथा अंत में **Submit Test** बटन पर क्लिक कर सकते हैं।
+- **परिणाम एवं स्कोरकार्ड:** सबमिट करने के बाद आपको कुल सही, गलत, प्रतिशत तथा प्रत्येक प्रश्न का विस्तृत स्पष्टीकरण (Explanation) प्राप्त होगा।
